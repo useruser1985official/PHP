@@ -13,40 +13,28 @@
 */
 
 class AntiInjection {
-    private $tags;
-    private $muda;
-    private $aspas;
-    private $acento;
-    private $retira;
-    private $escape;
     private $limpa;
     private $inteiro;
-    private static $listaNegra = array("select", "update", "drop", "truncate", "insert", "delete", "alter", "from", "where", "table", "tables", "database", "union", ";", "--", "#", "%", "&", "'", "\"", "(", ")", "<", ">", "[", "]", ":", "?", "`", "|", "*");
+    private static $listaNegra = array("select", "update", "drop", "truncate", "insert", "delete", "alter", "from", "where", "table", "tables", "database", "union", "--", "%", "<", ">", "[", "]", ":", "?", "`", "|", "*");
 
     public function texto($frase) : string {
-        $this->tags = strip_tags($frase);
-        $this->retira = str_ireplace("--", "", $this->tags);
-        $this->muda = htmlspecialchars($this->retira, ENT_QUOTES);
-        $this->escape = (get_magic_quotes_gpc()) ? $this->muda : addslashes($this->muda);
-        $this->limpa = trim($this->escape);
+        $this->limpa = htmlspecialchars($frase, ENT_QUOTES);
+        $this->limpa = str_ireplace("--", "", $this->limpa);
+        $this->limpa = strip_tags($this->limpa);
+        $this->limpa = trim($this->limpa);
 
         return $this->limpa;
     }
-    
+
     public function campo($frase) : string {
-        $this->tags = strip_tags($frase);
-        $this->retira = str_ireplace(self::$listaNegra, "", $this->tags);
-        $this->muda = htmlspecialchars($this->retira, ENT_QUOTES);
-        $this->escape = (get_magic_quotes_gpc()) ? $this->muda : addslashes($this->muda);
-        $this->limpa = trim($this->escape);
+        $this->limpa = $this->texto($frase);
+        $this->limpa = str_ireplace(self::$listaNegra, "", $this->limpa);
 
         return $this->limpa;
     }
-    
+
     public function numero($num) : int {
-        $this->tags = strip_tags($num);
-        $this->retira = str_ireplace(self::$listaNegra, "", $this->tags);
-        $this->inteiro = (int)$this->retira;
+        $this->inteiro = (int)$this->campo($num);
 
         return $this->inteiro;
     }
