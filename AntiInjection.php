@@ -18,8 +18,11 @@ class AntiInjection {
     private static $listaNegra = array("select", "update", "drop", "truncate", "insert", "delete", "alter", "from", "where", "table", "tables", "database", "union", "--", "%", "<", ">", "[", "]", ":", "?", "`", "|", "*");
 
     public function texto($frase) : string {
-        $this->limpa = htmlspecialchars($frase, ENT_QUOTES);
+        $this->limpa = str_ireplace(";", "", $frase);
         $this->limpa = str_ireplace("--", "", $this->limpa);
+        $this->limpa = str_ireplace("/*", "", $this->limpa);
+        $this->limpa = str_ireplace("*/", "", $this->limpa);
+        $this->limpa = htmlentities($this->limpa, ENT_QUOTES);
         $this->limpa = strip_tags($this->limpa);
         $this->limpa = trim($this->limpa);
 
