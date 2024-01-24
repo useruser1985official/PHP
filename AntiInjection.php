@@ -10,7 +10,6 @@
 * A classe limpa strings para evitar SQL Injection e Ataques XSS.
 */
 
-<?php
 class AntiInjection {
     private static $limpa;
     private static $inteiro;
