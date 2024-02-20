@@ -15,7 +15,7 @@ class AntiInjection {
     private static $inteiro;
     private static $listaNegra = array("select", "update", "drop", "truncate", "insert", "delete", "alter", "from", "where", "table", "tables", "database", "union", "--", "%", "<", ">", "[", "]", ":", "?", "`", "|", "*");
 
-    public static function texto($frase) : string {
+    public static function texto($frase): string {
         self::$limpa = str_ireplace(";", "&#59;", $frase);
         self::$limpa = str_ireplace("--", "&#45;&#45;", self::$limpa);
         self::$limpa = str_ireplace("*", "&#42;", self::$limpa);
@@ -31,14 +31,14 @@ class AntiInjection {
         return self::$limpa;
     }
 
-    public static function campo($frase) : string {
+    public static function campo($frase): string {
         self::$limpa = self::texto($frase);
         self::$limpa = str_ireplace(self::$listaNegra, "", self::$limpa);
 
         return self::$limpa;
     }
 
-    public static function numero($num) : int {
+    public static function numero($num): int {
         self::$inteiro = (int)self::campo($num);
 
         return self::$inteiro;
